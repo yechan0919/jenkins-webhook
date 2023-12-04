@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    environment {
+        // Docker Hub credentials
+        DOCKER_HUB_CREDENTIALS = credentials('docker-id')
+        // GitHub credentials
+        GITHUB_CREDENTIALS = credentials('dpcks0919')
+        // Docker image details
+        DOCKER_IMAGE_NAME = 'yechanaa/web-test'
+        DOCKER_IMAGE_TAG = 'latest'
+        GIT_BRANCH_NAME = 'main'
+    }
+
+    stages {
+        stage('Clone repository') {
+             checkout scm #repository를 jenkins workspace로 clone
+         }
+
+         stage('Build image') {
+             app = docker.build("teichae/jenkins:$BUILD_NUMBER") #docker image build 및 이름을 teicahe/jenkins:빌드번호 설정
+         }
+
+        // stage('Checkout') {
+                //     steps {
+                //         // Checkout code from GitHub
+                //         script {
+                //             git branch: "${GIT_BRANCH_NAME}", credentialsId: GITHUB_CREDENTIALS, url: 'https://github.com/yechan0919/jenkins-webhook.git'
+                //         }
+                //     }
+                // }
+
+                // stage('Build Docker Image') {
+                //     steps {
+                //         // Build Docker image
+                //         script {
+                //             dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f Dockerfile .")
+                //         }
+                //     }
+                // }
+
+        // stage('Push to Docker Hub') {
+        //     steps {
+        //         // Push Docker image to Docker Hub
+        //         script {
+        //             docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
+        //                 dockerImage.push()
+        //             }
+        //         }
+        //     }
+        // }
+    }
+}
