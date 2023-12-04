@@ -1,24 +1,9 @@
-pipeline {
-    agent any
+ node {
+     stage('Clone repository') {
+         checkout scm #repository를 jenkins workspace로 clone
+     }
 
-    environment {
-        // Docker Hub credentials
-        DOCKER_HUB_CREDENTIALS = credentials('docker-id')
-        // GitHub credentials
-        GITHUB_CREDENTIALS = credentials('dpcks0919')
-        // Docker image details
-        DOCKER_IMAGE_NAME = 'yechanaa/web-test'
-        DOCKER_IMAGE_TAG = 'latest'
-        GIT_BRANCH_NAME = 'main'
-    }
-
-    stages {
-        stage('Clone repository') {
-             checkout scm
-         }
-
-         stage('Build image') {
-             app = docker.build("yechanaa/web-test:latest")
-         }
-    }
+     stage('Build image') {
+         app = docker.build("teichae/jenkins:$BUILD_NUMBER") #docker image build 및 이름을 teicahe/jenkins:빌드번호 설정
+     }
 }
